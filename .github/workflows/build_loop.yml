@@ -219,6 +219,21 @@ jobs:
           submodules: recursive
           ref: ${{ env.TARGET_BRANCH }}
           
+      # Resolve submodule merge conflicts
+      - name: Resolve submodule merge conflicts
+        run: |
+          # Check for submodule conflicts
+          git submodule status | grep '^+'
+
+          # Reset the submodules to the correct commit
+          git submodule foreach --recursive 'git reset --hard HEAD'
+
+          # Add the changes to the index
+          git add .
+
+          # Commit the changes
+          git commit -m "Resolved submodule conflicts"
+          
       # Customize Loop: Download and apply patches
       - name: Customize Loop
         run: |
